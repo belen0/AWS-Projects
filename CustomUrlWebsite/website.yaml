@@ -20,7 +20,7 @@ Resources:
         #TTL: '120'
         Type: A
         AliasTarget:
-          HostedZoneId: Z3AQBSTGFYJSTF
+          HostedZoneId: Z2O1EMRO9K5GLX
           DNSName: s3-website.us-east-2.amazonaws.com 
           
         

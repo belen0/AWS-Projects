@@ -1,0 +1,34 @@
+Resources:
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: www.gurlalsidhu.com
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  
+  RouteRecord:
+    Type: 'AWS::Route53::RecordSetGroup'
+    #DependsOn: WebsiteBucket
+    Properties:
+      Comment: Pointing domain url to s3 DNS
+      #HostedZoneId: Z036538312PYKNA1UCB2S
+      HostedZoneName: gurlalsidhu.com.
+      RecordSets:
+      - Name: www.gurlalsidhu.com
+        #TTL: '120'
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z3AQBSTGFYJSTF
+          DNSName: s3-website.us-east-2.amazonaws.com 
+          
+        
+
+
+
+# Outputs:
+#   Websiteurl:
+#     Value: !GetAtt 
+#       - WebsiteBucket
+#       - WebsiteURL

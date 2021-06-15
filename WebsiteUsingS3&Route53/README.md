@@ -5,7 +5,7 @@ Please note: Domain was purchased before starting this. If you need to register 
 
 Here is how the setup looks like - [Design](https://github.com/gsidhu13/Projects/blob/d3825147780f757a5bbe5437ce67c74cb0c54cfa/WebsiteUsingS3&Route53/setup_pic.png)
 
-Cloudformation [Template](https://github.com/gsidhu13/Projects/blob/29de821dfe9356077c8bd372371def16556cf06e/WebsiteUsingS3&Route53/website.yaml) 
+Cloudformation [Template](https://github.com/gsidhu13/Projects/blob/23271ec5bb9f5ac00c2b86c894fd4d8e6d97ae0a/WebsiteUsingS3&Route53/website.yaml) 
 
 [Index](https://github.com/gsidhu13/Projects/blob/47373010cc05f0752b6a4512b79de1c6927708fb/WebsiteUsingS3&Route53/index.html) and [error](https://github.com/gsidhu13/Projects/blob/d3f515eb58e9d849f3dd735b78b4a44e03923410/WebsiteUsingS3&Route53/error.html) files that are required for your website
 

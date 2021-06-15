@@ -3,10 +3,10 @@
 
 Please note: Domain was purchased before starting this. If you need to register a domain, here's the instruction on [AWS Documentation](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html)
 
-Here is how the setup looks like - [Design](CustomUrlWebsite\setup_pic.png)
+Here is how the setup looks like - [Design](WebsiteUsingS3&Route53\setup_pic.png)
 
-Cloudformation [Template](CustomUrlWebsite\website.yaml) 
+Cloudformation [Template](WebsiteUsingS3&Route53\website.yaml) 
 
-[Index](CustomUrlWebsite\index.html) and [error](CustomUrlWebsite\error.html) files that are required for your website
+[Index](WebsiteUsingS3&Route53\index.html) and [error](CustomUrlWebsite\error.html) files that are required for your website
 
 Cli [Commands](WebsiteUsingS3&Route53/website.yaml) to execute your setup

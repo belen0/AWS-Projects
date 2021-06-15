@@ -9,4 +9,4 @@ Cloudformation [Template](WebsiteUsingS3&Route53/website.yaml)
 
 [Index](WebsiteUsingS3&Route53/index.html) and [error](WebsiteUsingS3&Route53\error.html) files that are required for your website
 
-Cli [Commands](WebsiteUsingS3&Route53/Cli_commands.md) to execute your setup
+Cli [Commands](https://github.com/gsidhu13/Projects/blob/29de821dfe9356077c8bd372371def16556cf06e/WebsiteUsingS3&Route53/Cli_commands.md) to execute your setup

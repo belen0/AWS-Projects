@@ -9,4 +9,4 @@ Cloudformation [Template](CustomUrlWebsite\website.yaml)
 
 [Index](CustomUrlWebsite\index.html) and [error](CustomUrlWebsite\error.html) files that are required for your website
 
-Cli [Commands](CustomUrlWebsite\Cli_commands) to execute your setup
+Cli [Commands](WebsiteUsingS3&Route53/website.yaml) to execute your setup

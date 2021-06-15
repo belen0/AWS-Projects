@@ -1,0 +1,28 @@
+Resources:
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: bucketname
+      AccessControl: PublicRead  #make bucket's publicaly readable 
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  
+  RouteRecord:
+    Type: 'AWS::Route53::RecordSetGroup'
+    DependsOn: WebsiteBucket   #not required
+    Properties:
+      Comment: Pointing domain url to s3 DNS
+      HostedZoneName: example.com  # if you don't know - get it using command - aws route53 list-hosted-zones-by-name  
+      RecordSets:
+      - Name: www.example.com     #desired url
+        Type: A
+        AliasTarget:
+          #varies based on the region you in https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints
+          HostedZoneId: Z2O1EMRO9K5GLX   
+          #varies based on the region you in https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints
+          DNSName: s3-website.us-east-2.amazonaws.com  
+          
+        
+
+

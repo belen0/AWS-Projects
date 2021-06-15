@@ -9,4 +9,4 @@ Cloudformation [Template](https://github.com/gsidhu13/Projects/blob/23271ec5bb9f
 
 [Index](https://github.com/gsidhu13/Projects/blob/47373010cc05f0752b6a4512b79de1c6927708fb/WebsiteUsingS3&Route53/index.html) and [error](https://github.com/gsidhu13/Projects/blob/d3f515eb58e9d849f3dd735b78b4a44e03923410/WebsiteUsingS3&Route53/error.html) files that are required for your website
 
-Cli [Commands](https://github.com/gsidhu13/Projects/blob/29de821dfe9356077c8bd372371def16556cf06e/WebsiteUsingS3&Route53/Cli_commands.md) to execute your setup
+Cli [Commands](WebsiteUsingS3&Route53/Cli_commands.md) to execute your setup

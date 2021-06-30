@@ -1,0 +1,68 @@
+Parameters:
+  BucketName:
+    Description: S3 Trigger Bucket
+    Type: String
+    Default: 's3pipelinegs'
+  KeyName:
+    Type: AWS::EC2::KeyPair::ec2pipeline #KeyName key should already exist in the region
+    Description: The EC2 Key Pair to allow SSH access to the instance
+  Userdata: 
+    Fn::Base64: !Sub |
+      <powershell>  
+      New-Item -Path c:\temp -ItemType "directory" -Force
+      powershell.exe -Command Read-S3Object -BucketName bucket-name/latest -Key codedeploy-agent.msi -File c:\temp\codedeploy-agent.msi
+      Start-Process -Wait -FilePath c:\temp\codedeploy-agent.msi -WindowStyle Hidden
+      </powershell>
+Resources:
+  s3pipeline:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration: 
+        Status: Enabled
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: Allow
+          Principal: 
+            Service: 
+              - ec2.amazonaws.com 
+          Action:
+            - sts:AssumeRolePolicyDocument
+    ManagedPolicyArns: 
+      - arn:aws:iam::aws:policy/AmazonEC2RoleforAWSCodeDeploy
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: SecurityGroup for EC2Instances-pipeline
+      GroupName: 'EC2-pipeline'
+      SecurityGroupIngress: 
+        - CidrIP: 0.0.0.0/0
+          Description: 'Inbound port 80'
+          IpProtocol: tcp 
+          FromPort: 80
+          ToPort: 80
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      InstanceProfileName: 'EC2Instance-pipeline profile'
+      Roles: !Ref EC2InstanceRole
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: "ami-077f1edd46ddb3129" 
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      LaunchTemplate: 
+      SecurityGroups: !Ref SecurityGroup
+      UserData: !Ref Userdata
+      IamInstanceProfile: !Ref EC2InstanceProfile 
+      
+
+
+
+
+

@@ -1,0 +1,2 @@
+
+aws ec2 create-key-pair --key-name my-key-pair --query "KeyMaterial" --output text > my-key-pair.pem 

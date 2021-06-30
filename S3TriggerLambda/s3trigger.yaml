@@ -1,0 +1,87 @@
+Parameters:
+  BucketName:
+    Description: S3 Trigger Bucket
+    Type: String
+    Default: 's3triggergs'
+
+Resources:
+  S3triggerBucket:
+    Type: AWS::S3::Bucket
+    DependsOn: s3permissions
+    Properties:
+      BucketName: !Ref BucketName
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:Put'
+            Function: !GetAtt Lambdafunction.Arn
+  
+  s3permissions:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt Lambdafunction.Arn
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub 'arn:aws:s3:::${BucketName}'
+         
+
+  lambdarole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:  # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - lambda.amazonaws.com 
+            Action:                 #action must be declared
+              - sts:AssumeRole
+      Description: lambda role S3triggerBucket
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole 
+      Path: '/'
+      Policies:
+        - PolicyName: lambdas3
+          PolicyDocument: 
+            Version: "2012-10-17" 
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: "arn:aws:s3:::${BucketName}/*"
+
+  Lambdafunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Description: 'S3 put trigger function'
+      FunctionName: 's3trigger-function'
+      Role: !GetAtt lambdarole.Arn 
+      Runtime: 'python3.7'  #need to declare if using zipfile and entering code in template
+      Code:
+        ZipFile:  |
+
+          import json
+          import urllib.parse
+          import boto3
+
+          print('Loading function')
+
+          s3 = boto3.client('s3')
+
+
+          def lambda_handler(event, context):
+              #print("Received event: " + json.dumps(event, indent=2))
+
+              # Get the object from the event and show its content type
+              bucket = event['Records'][0]['s3']['bucket']['name']
+              key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
+              try:
+                  response = s3.get_object(Bucket=bucket, Key=key)
+                  print("CONTENT TYPE: " + response['ContentType'])
+                  return response['ContentType']
+              except Exception as e:
+                  print(e)
+                  print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
+                  raise e

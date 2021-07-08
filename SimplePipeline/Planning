@@ -1,0 +1,21 @@
+Step 3 Requirements
+
+Need: CodeDeploy Application, application name - MyDemoApplication, compute platform - EC2/on-prmises
+Action:
+
+Need: ** deployment group - group name, service role - attach policy to existing role - AWSCodeDeployRole **
+ https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html
+**Environment configuration - Amazon EC2 instance, name in key and MyCodePipelineDemo in value field
+**deployment configuration - CodeDeployDefault.OneAtaTime
+Load Balancer - don't enable load balancing
+ Pipeline 
+
+ Pipeline Name- MyPipeline
+ ServiceRole - Create one or use existing one?
+ Source Stage - source provide - amazon s3 
+ s3object key - sampleApp.zip...
+ Deploystage - deploy provider - aws code deploy 
+ Application name from CodeDeploy
+ 
+
+

@@ -27,8 +27,9 @@ Resources:
             Action:
               - sts:AssumeRole
       Description: ec2 role for codedeploy 
-      ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+          arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties: 
@@ -66,7 +67,25 @@ Resources:
           Start-Process -Wait -FilePath c:\temp\codedeploy-agent.msi -WindowStyle Hidden
           </powershell> 
       IamInstanceProfile: !Ref EC2InstanceProfile 
-      
+      Tags:
+        - Key: Name 
+          Value: MyCodePipelineDemo
+  
+  CodeDeployApp:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: MyDemoApplication
+      ComputePlatform: Server 
+  CodeDeployGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    DependsOn: EC2InstanceRole 
+    Properties:
+      ApplicationName: !Ref CodeDeployApp 
+      DeploymentConfigName: CodeDeployDefault.OneAtaTime
+      ServiceRoleArn: !GetAtt EC2InstanceRole.Arn 
+      Ec2TagFilters:
+        - Key: Name 
+          Value: MyCodePipelineDemo
 
 
 

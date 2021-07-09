@@ -1,0 +1,12 @@
+Resources:
+  CodeCommitRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryDescription: CodeCommitSimple Repository
+      RepositoryName: mydemoRepo 
+
+Outputs:
+  Cloneurl:
+    Value: !GetAtt CodeCommitRepo.CloneUrlHttp  
+
+  

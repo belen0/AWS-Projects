@@ -1,0 +1,18 @@
+Step 1
+
+1. Create repository
+2. reponsitory name - mydemoRepo
+3. Setup local repository 
+4. clone URL 
+
+Action: 
+create a repository, setup a name and use output to get cloneurlhttp
+
+Step 2 Push the local rep to codecommit
+
+Step 3 -cf stack
+
+1. create a role
+    service - EC2 
+    policy - managed - AmazonEC2RoleforAWSCodeDeploy
+    

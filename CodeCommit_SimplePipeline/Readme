@@ -1,0 +1,17 @@
+1. Create the repository using CodeCommit stack 
+keep the output of the stack available - cloneurlhttp 
+
+aws cloudformation create-stack --stack-name repocommit --template-body file://CodeCommit.yaml 
+ 
+2. Check the status of stack and get output value:
+    aws cloudformation describe-stacks --stack-name repocommit
+
+    https://git-codecommit.us-east-1.amazonaws.com/v1/repos/mydemoRepo
+
+    
+2. Create a local folder and clone the repo  
+add sample.zip and push the changes to codecommit repository
+
+   git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/mydemoRepo 
+enter in git credentials username and password 
+    

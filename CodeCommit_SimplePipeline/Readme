@@ -15,3 +15,9 @@ add sample.zip and push the changes to codecommit repository
    git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/mydemoRepo 
 enter in git credentials username and password 
     
+3. Create EC2 instance and deploy codedeploy on it and use the output to get dnsname
+
+ aws cloudformation update-stack --stack-name ec2role --template-body file://ec2codedeploy.yaml --capabilities CAPABILITY_NAMED_IAM
+
+
+

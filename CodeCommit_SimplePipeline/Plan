@@ -1,18 +1,75 @@
 Step 1
 
-1. Create repository
-2. reponsitory name - mydemoRepo
-3. Setup local repository 
-4. clone URL 
+    1. Create repository
+    2. reponsitory name - mydemoRepo
+    3. Setup local repository 
+    4. clone URL 
 
-Action: 
-create a repository, setup a name and use output to get cloneurlhttp
+    Action: 
+    create a repository, setup a name and use output to get cloneurlhttp
 
 Step 2 Push the local rep to codecommit
 
 Step 3 -cf stack
 
-1. create a role
-    service - EC2 
-    policy - managed - AmazonEC2RoleforAWSCodeDeploy
-    
+    1. create a role
+        service - EC2 
+        policy - managed - AmazonEC2RoleforAWSCodeDeploy
+
+    2. Launch instance 
+    type = t2.micro
+    ami = ami-0dc2d3e4c0f9ebd18
+    Auto-assign Public IP = enable
+    IAM = step 1 ^^
+    UserData: 
+    #!/bin/bash
+    yum -y update
+    yum install -y ruby
+    yum install -y aws-cli
+    cd /home/ec2-user
+    wget https://aws-codedeploy-us-east-2.s3.us-east-2.amazonaws.com/latest/install
+    chmod +x ./install
+    ./install auto
+
+    Tags: Key = Name n Value = MyCodePipelineDemo
+
+    2.1 Security Group:
+        SSH under source = My IP
+        HTTP under source = My IP
+
+Step 4  Creating codedeploy application
+
+    1. Role for codedeploy -codedeployrole
+        service = codedeploy
+        permissions = AWSCodeDeployRole (managed)
+
+    2. CodeDeploy Application
+        Application name - MyDemoApplication
+        Compute Platform - EC2/on-premise
+
+    2.1 Deployment group 
+        name - MyDemoDeploymentGroup
+        role - codedeployrole
+        deploymenttype - in -place
+        environment - EC2 
+        key = Name, Value = MyCodePipelineDemo 
+        Deployment Configurations = CodeDeployDefault.OneAtaTime
+        Load Balancer = disable 
+
+Step 5 Building MyCodePipeline
+    Service role 
+    PipelineName - MyFirstPipeline
+    Source stage: 
+        SourceProvider - codecommit
+        RepositoryName n Branch 
+    DeployStage
+        DeployProvider - AWSCodeDeployRole
+        ApplicationName - MyDemoApplication
+        DeploymentGroup - MyDemoDeploymentGroup
+
+Cross stacking
+    Import Repo Name and Branch name
+        
+
+
+

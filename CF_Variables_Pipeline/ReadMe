@@ -1,0 +1,20 @@
+Create a repo
+    Clone to local computer
+    upload the yaml template 
+    push it to codecommit repo
+
+to create cfm pipeline
+ aws cloudformation create-stack --stack-name cfmdeploypipeline --template-body file://pipeline.yaml --capabilities CAPABILITY_NAMED_IAM --parameters  ParameterKey=MasterUser,ParameterValue=cfmdeploy ParameterKey=MasterPassword,ParameterValue=cfmdeploy2020
+
+https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-role-arn-error/
+
+Issue: couldn't use DeployVariables
+workaround: try to convert yaml to json 
+
+issue: json didn't help
+resolution: got to have run order for deploy stage 
+
+
+
+
+

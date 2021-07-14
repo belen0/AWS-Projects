@@ -1,0 +1,10 @@
+{
+  "Parameters": {
+    "DBClusterName": "MyDBCluster",
+    "DBInstanceName": "MyDBInstance",
+    "DBInstanceClass": "db.t3.medium",
+    "Purpose": "testing",
+    "MasterUser": "cfmdeploy1",
+    "MasterPassword": "cfmdeploy20202"
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "Parameters": {
+      "DBClusterName": "MyDBCluster1",
+      "DBInstanceName": "MyDBInstance1",
+      "DBInstanceClass": "db.r5.large",
+      "Purpose": "production",
+      "MasterUser": "cfmdeploy",
+      "MasterPassword": "cfmdeploy2020"
+    }
+  }
+  

@@ -1,0 +1,31 @@
+Resources:
+  CodeCommitRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryDescription: CodeCommitSimple Repository
+      RepositoryName: mydemoRepo 
+  CFDocumentDBRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - cloudformation.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Description: CF permissions for documentDB 
+      RoleName: cf_documentdb
+      Policies:
+        - PolicyName: cf_documentdb
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - rds:DescribeDBClusters",
+                  - "rds:CreateDBCluster"
+                  - "rds:DeleteDBCluster"
+                  - "rds:CreateDBInstance"
+                Resource: '*'

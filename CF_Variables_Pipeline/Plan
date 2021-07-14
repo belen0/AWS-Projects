@@ -1,0 +1,103 @@
+Step 1 -PreReq
+    Create a repo and service role
+
+Step 2 Download and edit CF template
+    1.  As per tutorial Add A parameter (I don't think this is required )
+         Purpose:
+            Type: String
+            Default: testing
+            AllowedValues:
+            - testing
+            - production
+            Description: The purpose of this instance. 
+        Stack name output     
+          StackName:
+            Value: !Ref AWS::StackName
+    2. upload the template to repo
+        aws codecommit put-file --repository-name mydemoRepo --branch-name master \
+         --file-content file://documentdb_full_stack.yaml \
+         --file-path /documentdb_full_stack.yaml \
+         --cli-binary-format raw-in-base64-out
+     Note: you get invalid base64 unless you include --cli-binary-format raw-in-base64-out 
+
+Step 3 Create a pipeline 
+    pipelinename - MyCFNDeployPipeline
+    ServiceRole - MyCFNDeployPipeline role
+    Artificat bucket - artifact_bucketgs
+    Source Stage: 
+        Source provider - codecommit
+        reponame - step 1 
+        branch name - master (step 2)
+    DeployStage:
+        provider - cloudformation
+        action mode - create  or update a stack 
+        stackname - cfnPipeline 
+        output file name - outputs 
+        parameter overrides 
+            {
+                "DBClusterName": "MyDBCluster",
+                "DBInstanceName": "MyDBInstance",
+                "MasterUser": "UserName", #codedeploy
+                "MasterPassword": "Password", #cloudformation2021
+                "DBInstanceClass": "db.t3.medium",
+                "Purpose": "testing"}
+    There isn't really a safer way to declare parameter overrrides, i'll have to create configuration file n has to be JSON formatted
+    https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline-cfn-artifacts.html 
+
+    Ran into service role issue :
+        Unable to create the resource. Verify that you have permission to create service linked role. Otherwise wait and try again later (Service: AmazonRDS; Status Code: 400; Error Code: InvalidParameterValue; Request ID: 90df09a9-85db-472d-85d5-fec65d878e1d; Proxy: null)
+
+    resolution: 
+    add rds.amazonaws.com as service as well, creating a service role could create more problems - didn't work
+    just create a service role:
+       ServiceRoleRDS:
+        Type: AWS::IAM::ServiceLinkedRole
+        Properties: 
+        AWSServiceName: rds.amazonaws.com
+
+        another issue on deleting a stack 
+        resolution: https://stackoverflow.com/questions/48709423/unable-to-delete-cfn-stack-role-is-invalid-or-cannot-be-assumed
+
+
+
+Step 4 -  change set 
+    ActionName - Change_set
+    Action Provider - cloudformation
+    Inputartifact - SourceArtifact 
+    ActionMode - Create or replace a change set 
+    StackName - #{DeployVariables.StackName} 
+    Change set name - my-changeset 
+    Parameters overrides 
+        {
+        "DBClusterName": "MyDBCluster",
+        "DBInstanceName": "MyDBInstance",
+        "MasterUser": "UserName",
+        "MasterPassword": "Password",
+        "DBInstanceClass": "db.r4.large",
+        "Purpose": "production"}
+        Maybe create second configuration file here
+    
+Step 5 Manual approval 
+
+Step 6 Execute Change Set 
+    Action Name Execute_Change_Set
+    Action Provider - cloudformation
+    Inputartifact - SourceArtifact 
+    Input Artifact - Execute a change set
+    stack name - #{DeployVariables.StackName} 
+    change set name - my-changeset 
+
+Step 7 - deployment action - delete the stack
+    ActionName- DeleteStack
+    DeployProvider - Cloudformation 
+    ActionMode - delete a stack
+    input artifact -SourceArtifact
+
+Summary 
+
+
+
+
+
+
+

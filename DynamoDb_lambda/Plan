@@ -1,0 +1,18 @@
+Step 1 - Build a template 
+    1. Build DynamoDb database - using one from Aws Tutorial https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.01.html 
+        partition key = year, attribute type = number
+        sort key = title , attribute type = string
+        table name = Movies
+     
+    2. lambda function role
+        attach policies:
+            execution role
+            dynamodb read role
+            dynamodb execution rol 
+    
+    3. Lambda function 
+         handler = index.handler
+         Runtime = 3.7 
+         lambda code 
+         role
+          

@@ -1,0 +1,73 @@
+Resources:
+  dynamodbTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: 'year'
+          AttributeType: 'N'
+        - 
+          AttributeName: 'title'
+          AttributeType: 'S'  
+      KeySchema:
+        - 
+          AttributeName: 'year'
+          KeyType: 'HASH'
+        - 
+          AttributeName: 'title'
+          KeyType: 'RANGE'          
+      ProvisionedThroughput: 
+        ReadCapacityUnits: '5'
+        WriteCapacityUnits: '5' 
+      TableName: 'Movies'
+
+  lambdarole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:  # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - lambda.amazonaws.com 
+            Action:                 #action must be declared
+              - sts:AssumeRole
+      Description: lambda role to query dynamodb
+      ManagedPolicyArns: 
+        - 
+          arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess
+          arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole
+  
+  
+  Lambdafunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Description: 'api invoke query dynamodb'
+      FunctionName: 'api_dynamodb function'
+      Role: !GetAtt lambdarole.Arn 
+      Runtime: 'python3.7'  #need to declare if using zipfile and entering code in template
+      Code:
+        ZipFile:  |
+
+          import json
+          import boto3
+          from boto3.dynamodb.conditions import key
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('Movies')
+
+          def lambda_handler(event, context):
+              response = table.query(
+                  IndexName='string',
+                  Select='ALL_ATTRIBUTES',
+                  Limit=15,
+                  ScanIndexForward=True,
+                  ReturnConsumedCapacity='NONE',
+                  ProjectionExpression='string',
+                  KeyConditionExpression=Key('year').eq('2013'),
+              )
+              return response['Items']
+

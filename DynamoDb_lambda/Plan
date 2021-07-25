@@ -15,4 +15,7 @@ Step 1 - Build a template
          Runtime = 3.7 
          lambda code 
          role
-          
+    4. Create API gateway
+        Target: lambda 
+        Output - api endpoint
+

@@ -51,7 +51,7 @@ Resources:
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties: 
-      ImageId: "ami-077f1edd46ddb3129" 
+      ImageId: "ami-077f1edd46ddb3129"  #windows 2016 server
       InstanceType: t2.micro
       KeyName: !Ref MyKeyName
       #LaunchTemplate: 

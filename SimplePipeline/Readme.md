@@ -7,5 +7,5 @@ Deployment:
 * Provision all your resources using CloudFormation - [Template](https://github.com/gsidhu13/AWS-Projects/blob/main/SimplePipeline/s3pipeline.YAML)
 * Deploy your CFN stack and upload zip folder to your instance - [Deploy](https://github.com/gsidhu13/AWS-Projects/blob/main/SimplePipeline/deploy.sh)
 
-I have this additional [Planning](https://github.com/gsidhu13/AWS-Projects/blob/main/SimplePipeline/Planning) file in here. This just suggests how I plan before I provision the resources for a stack. 
+I have this additional [Planning](https://github.com/gsidhu13/AWS-Projects/blob/main/SimplePipeline/Planning) file in here. This just suggests how I plan before I provisioned the resources for a stack. 
 

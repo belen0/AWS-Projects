@@ -1,0 +1,14 @@
+Couldn't upload a folder
+    It requires a zip folder
+
+Getting this error on completion
+    ELB processes are not healthy on all instances.
+    None of the instances are sending data.
+    33.3 % of the requests to the ELB are failing with HTTP 5xx. Insufficient request rate (1.5 requests/min) to determine application health (6 minutes ago).
+    ELB health is failing or not available for all instances.
+
+Did you know AWS conducts metric on your all S3 buckets? it tells, how much total data is in your buckets and number of objects
+
+what's transcode?
+
+it converts your media files to a comptaiable version that will work on your laptop, smart devices and/or phones

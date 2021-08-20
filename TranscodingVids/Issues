@@ -1,0 +1,75 @@
+
+malformed Policy Document
+{
+"Version":"2008-10-17",
+"Statement":
+    [
+        {  
+            "Sid":"1",
+            "Effect":
+            "Allow","Action":
+            
+    ["s3:Put*","s3:ListBucket","s3:*MultipartUpload*","s3:Get*"],"Resource":"*"},{"Sid":"2","Effect":"Allow","Action":"sns:Publish","Resource":"*"},{"Sid":"3","Effect":"Deny","Action":["s3:*Delete*","s3:*Policy*","sns:*Remove*","sns:*Delete*","sns:*Permission*"],"Resource":"*"}]}'
+ 
+ maybe this is how it suppose to bucket
+
+ {
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:Put*",
+                "s3:ListBucket",
+                "s3:*MultipartUpload*",
+                "s3:Get*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "2",
+            "Effect": "Allow",
+            "Action": "sns:Publish",
+            "Resource": "*"
+        },
+        {
+            "Sid": "3",
+            "Effect": "Deny",
+            "Action": [
+                "s3:*Delete*",
+                "s3:*Policy*",
+                "sns:*Remove*",
+                "sns:*Delete*",
+                "sns:*Permission*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+these are policies not assumedocument
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "elastictranscoder.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+
+ok the fix is to create an assume policy and then attach it to Role
+
+new error message [OutputBucket and ThumbnailConfig are mutually exclusive.]
+
+answer was in the documentation:
+    
+was having trouble getting arn of the role 
+ I tried this: print(response['Arn'])
+ should be: rolearn = response_role['Role']['Arn'] 

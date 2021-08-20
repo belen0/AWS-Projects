@@ -1,0 +1,10 @@
+Issue 1.
+    adding these two under managed policies didn't work 
+        arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess
+        arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole          
+
+    Resolution:
+        Adding these roles as policies 
+        
+
+

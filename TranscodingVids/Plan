@@ -1,0 +1,118 @@
+Two S3 buckets 
+
+Create a pipeline
+
+Create a lambda function 
+    Lambda code:
+        import json
+        import urllib.parse
+        import boto3
+
+        s3 = boto3.client('s3')
+
+        transcoder = boto3.client('elastictranscoder')
+
+        def lambda_handler(event, context):
+            bucket = event['Records'][0]['s3']['bucket']['name']
+            key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
+            
+            response = transcoder.create_job(
+            PipelineId='1628779394709-mkrsir',
+            
+            Input={
+                'Key': key,
+                'FrameRate': 'auto',
+                'Resolution': 'auto',
+                'AspectRatio': 'auto',
+                'Interlaced': 'auto',
+                'Container': 'auto',
+            },
+
+            Outputs=[
+                {
+                    'Key': key + '.mp4',
+                    'Rotate': 'auto',
+                    'PresetId': '1351620000001-000010',
+                },
+            ],
+
+        )
+    permissions:
+        Lambda Role:
+        BasicexecutionPolicy
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": "logs:CreateLogGroup",
+                        "Resource": "arn:aws:logs:us-east-1:460007636749:*"
+                    },
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "logs:CreateLogStream",
+                            "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                            "arn:aws:logs:us-east-1:460007636749:log-group:/aws/lambda/transcoderfunction:*"
+                        ]
+                    }
+                ]
+            }
+        ElasticTranscoderPolicy
+
+         {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": [
+                        "elastictranscoder:*",
+                        "s3:ListAllMyBuckets",
+                        "s3:ListBucket",
+                        "iam:ListRoles",
+                        "sns:ListTopics"
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "*"
+                },
+                {
+                    "Action": [
+                        "iam:PassRole"
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "*",
+                    "Condition": {
+                        "StringLike": {
+                            "iam:PassedToService": [
+                                "elastictranscoder.amazonaws.com"
+                            ]
+                        }
+                    }
+                }
+            ]
+             }
+        S3FullPermissions:
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": "s3:*",
+                        "Resource": "*"
+                    }
+                ]
+            }
+
+I might have to export certain values and use them for another templated. nested templates?
+
+OK BIG ISSUE - ELASTIC TRANSCODER isn't supported by CFN yet
+
+we will create everything using python SDK
+
+Pipeline policy:
+    {"Version":"2008-10-17","Statement":[{"Sid":"1","Effect":"Allow","Action":["s3:Put*","s3:ListBucket","s3:*MultipartUpload*","s3:Get*"],"Resource":"*"},{"Sid":"2","Effect":"Allow","Action":"sns:Publish","Resource":"*"},{"Sid":"3","Effect":"Deny","Action":["s3:*Delete*","s3:*Policy*","sns:*Remove*","sns:*Delete*","sns:*Permission*"],"Resource":"*"}]}
+
+three S3 buckets 
+
+Create a pipeline

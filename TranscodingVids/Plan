@@ -46,7 +46,7 @@ Create a lambda function
                     {
                         "Effect": "Allow",
                         "Action": "logs:CreateLogGroup",
-                        "Resource": "arn:aws:logs:us-east-1:460007636749:*"
+                        "Resource": "arn:aws:logs:us-east-1:46000769:*"
                     },
                     {
                         "Effect": "Allow",
@@ -55,7 +55,7 @@ Create a lambda function
                             "logs:PutLogEvents"
                         ],
                         "Resource": [
-                            "arn:aws:logs:us-east-1:460007636749:log-group:/aws/lambda/transcoderfunction:*"
+                            "arn:aws:logs:us-east-1:460036749:log-group:/aws/lambda/transcoderfunction:*"
                         ]
                     }
                 ]

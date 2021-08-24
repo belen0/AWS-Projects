@@ -13,3 +13,6 @@ All of these projects are built using **AWS CloudFormation** or/and AWS CLI
 * Build a ***CodePipeline*** using ***CodeCommit*** as the source — [CodeCommit Pipeline](https://github.com/gsidhu13/AWS-Projects/tree/main/CodeCommit_SimplePipeline)
 
 * [**Ongoing**] ***API Gateway*** pulls data from ***DynamoDb*** table using ***lambda*** function — [API Data Pull From Dynamodb **Ongoing**](https://github.com/gsidhu13/AWS-Projects/tree/main/DynamoDb_lambda)
+* [**Ongoing**] Automate video transcoding using ***Elastic Transcoder*** and ***AWS lambda*** — [Transcode Videos](https://github.com/gsidhu13/AWS-Projects/tree/main/TranscodingVids) 
+
+

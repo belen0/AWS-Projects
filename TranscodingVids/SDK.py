@@ -57,7 +57,7 @@ basicexecutiondocument = {
         {
             "Effect": "Allow",
             "Action": "logs:CreateLogGroup",
-            "Resource": "arn:aws:logs:us-east-1:460007636749:*"
+            "Resource": "arn:aws:logs:us-east-1:4606749:*"
         },
         {
             "Effect": "Allow",
@@ -66,7 +66,7 @@ basicexecutiondocument = {
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:us-east-1:460007636749:log-group:/aws/lambda/transcoderfunction:*"
+                "arn:aws:logs:us-east-1:4600049:log-group:/aws/lambda/transcoderfunction:*"
             ]
         }
     ]

@@ -1,16 +1,24 @@
 import boto3
 import json 
 
+##Declare variable for bucket names, role name
+
 inputbucket = 'inputbuckgs'
 outputbucket = 'outputbucketgs'
 thumbbucket = 'thumbnailbucketgs'
+
+# Boto3 Clients
+
 rolename = 'pipelinerole'
 transcoder = boto3.client('elastictranscoder')
 buckets = boto3.client('s3')
 iam = boto3.client('iam')
 client = boto3.client('lambda')
+
+#Assume policy for role policy 
+
 assumerolepolicy = {
-        "Version": "2008-10-17",
+        "Version": "2012-10-17",
         "Statement": [
                         {
                             "Effect": "Allow",
@@ -27,6 +35,7 @@ assumerolepolicy = {
         ]
     }
 
+#Creating a role and adding assume role policy 
 
 response_role = iam.create_role(
     RoleName= rolename,
@@ -35,7 +44,10 @@ response_role = iam.create_role(
     Description='role created for transcoder pipeline',
 )
 
+
+# generate role arn 
 rolearn = response_role['Role']['Arn']
+
 
 #Create Policies
 basicexecutiondocument = {
@@ -59,10 +71,13 @@ basicexecutiondocument = {
         }
     ]
 }
+
+
 policy1 = iam.create_policy(
-  PolicyName='basicexecutionPolicy30',
-  PolicyDocument=json.dumps(basicexecutiondocument)
+PolicyName='basicexecutionPolicy3',
+PolicyDocument=json.dumps(basicexecutiondocument)
 )
+
 ElasticTranscoderdocument = {
     "Version": "2012-10-17",
     "Statement": [
@@ -93,9 +108,10 @@ ElasticTranscoderdocument = {
     }
     ]
 }
+
 policy2 = iam.create_policy(
-  PolicyName='ElasticTranscoderPolicy30',
-  PolicyDocument=json.dumps(ElasticTranscoderdocument)
+PolicyName='ElasticTranscoderPolicy3',
+PolicyDocument=json.dumps(ElasticTranscoderdocument)
 )
 
 S3FullPermissionsdocument = {
@@ -108,10 +124,12 @@ S3FullPermissionsdocument = {
         }
     ]
 }
+
 policy3 = iam.create_policy(
-  PolicyName='S3FullPermissions30',
-  PolicyDocument=json.dumps(ElasticTranscoderdocument)
+PolicyName='S3FullPermissions3',
+PolicyDocument=json.dumps(S3FullPermissionsdocument)
 )
+
 
 ElastictranscodeputDocument= {
     "Version": "2012-10-17",
@@ -149,10 +167,12 @@ ElastictranscodeputDocument= {
 }
 
 policy4 = iam.create_policy(
-  PolicyName='Elastictranscoderpoli30',
-  PolicyDocument=json.dumps(ElastictranscodeputDocument)
+PolicyName='Elastictranscoderpoli3',
+PolicyDocument=json.dumps(ElastictranscodeputDocument)
 )
+
 #Get Policies 
+
 
 policy1arn = policy1['Policy']['Arn']
 policy2arn = policy2['Policy']['Arn']
@@ -213,7 +233,7 @@ response = transcoder.create_pipeline(
 response_lam = client.create_function(
     FunctionName='transcoder-lambda',
     Runtime='python3.8',
-    Role=rolearn,
+    Role = rolearn ,
     Handler='index.handler',
     Code={
         'S3Bucket': inputbucket,
@@ -222,4 +242,47 @@ response_lam = client.create_function(
     Description='function to transcode videos'
 )
 
+functionarn = response_lam['FunctionArn']
+bucket1 = buckets.create_bucket(
+    ACL='private',
+    Bucket= inputbucket,
+)
 
+print(bucket1)
+
+response = buckets.create_bucket(
+    ACL='private',
+    Bucket= outputbucket,
+)
+
+response = buckets.create_bucket(
+    ACL='private',
+    Bucket= thumbbucket,
+)
+response = transcoder.create_pipeline(
+    Name='transcodingvideo',
+    InputBucket= inputbucket,
+    Role=rolearn,
+    ContentConfig={
+        'Bucket': outputbucket,
+        'StorageClass': 'Standard' },
+    ThumbnailConfig={
+        'Bucket': thumbbucket,
+        'StorageClass': 'Standard', #Standard or ReducedRedundancy
+    }
+)
+
+response = client.put_bucket_notification_configuration(
+    Bucket= inputbucket ,
+    NotificationConfiguration={
+        
+        'LambdaFunctionConfigurations': [
+            {
+                'LambdaFunctionArn': functionarn,
+                'Events': [
+                    's3:ObjectCreated:Put'
+                ]
+            }
+        ]
+    }
+)
